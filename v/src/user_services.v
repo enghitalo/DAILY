@@ -1,13 +1,14 @@
 module main
 
-// import time
 import crypto.bcrypt
 import databases
 import json
 
-fn (mut app App) service_add_user( username string, password string ) ?User {
+fn (mut app App) service_add_user(username string, password string) ?User {
 	mut db := databases.create_db_connection()
-	hashed_password := bcrypt.generate_from_password(password.bytes(), bcrypt.min_cost) or { panic(err) }
+	hashed_password := bcrypt.generate_from_password(password.bytes(), bcrypt.min_cost) or {
+		panic(err)
+	}
 
 	db.query("
 		INSERT INTO usersx(username, password)
@@ -26,26 +27,25 @@ fn (mut app App) service_add_user( username string, password string ) ?User {
 		println(err)
 		return none
 	}
-	
-	json_string := '${results.maps()[0]}'.replace("'",'"')
-	
+
+	json_string := '${results.maps()[0]}'.replace("'", '"')
+
 	mut user := json.decode(User, json_string) or {
 		eprintln('Failed to decode user json, error: $err')
 		return none
 	}
-		
+
 	db.free()
 	db.close()
 	return user
 }
 
-fn (mut app App) service_get_user( username string, password string ) User {
+fn (mut app App) service_get_user(username string, password string) User {
 	user := User{
 		// username: username
 		// password: password
 		// created_at: time.now()
 	}
-
 
 	// sql app.db {
 	// 	insert user into User
@@ -99,7 +99,6 @@ fn (mut app App) service_get_user( username string, password string ) User {
 // 		// Access the name of user
 // 		println(user)
 // 	}
-
 
 // 	// Free the query result
 // 	find_user.free()

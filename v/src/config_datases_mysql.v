@@ -1,10 +1,11 @@
 module databases
 
 import mysql
+import os
 
 pub fn create_db_connection() &mysql.Connection {
 	mut db := &mysql.Connection{
-		host: 'localhost'
+		host: os.getenv('DB_HOST')
 		port: 3306
 		username: 'hitalo'
 		password: 'password'

@@ -2,20 +2,19 @@ module main
 
 import vweb
 import databases
-// import time
+import zztkm.vdotenv
 
 const (
 	http_port = 8080
 )
 
 struct App {
-	vweb.Context // pub mut:
-	//     db sqlite.DB
+	vweb.Context
 }
 
 fn main() {
+	vdotenv.load()
 	mut db := databases.create_db_connection()
-	
 	db.query('CREATE TABLE usersx (
 		id BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		username VARCHAR(191) UNIQUE,
