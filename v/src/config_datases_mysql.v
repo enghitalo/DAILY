@@ -6,10 +6,10 @@ import os
 pub fn create_db_connection() &mysql.Connection {
 	mut db := &mysql.Connection{
 		host: os.getenv('DB_HOST')
-		port: 3306
-		username: 'hitalo'
-		password: 'password'
-		dbname: 'daily-homolog'
+		port: os.getenv('DB_PORT').u32()
+		username: os.getenv('DB_USERNAME')
+		password: os.getenv('DB_PASSWORD')
+		dbname: os.getenv('DB_NAME')
 	}
 
 	db.connect() or { panic(err) }

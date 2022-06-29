@@ -7,6 +7,7 @@ import encoding.base64
 import json
 import databases
 import time
+import os
 
 struct JwtHeader {
 	alg string
@@ -66,8 +67,7 @@ fn (mut app App) service_auth(username string, password string) ?string {
 }
 
 fn make_token(user User) string {
-	// TODO - get secret from .env
-	secret := 'your-256-bit-secret'
+	secret := os.getenv('SECRET_KEY')
 
 	jwt_header := JwtHeader{'HS256', 'JWT'}
 	jwt_payload := JwtPayload{
