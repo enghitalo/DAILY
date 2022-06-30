@@ -35,10 +35,7 @@ fn main() {
 }
 
 fn new_app() &App {
-	mut app := &App{
-		// db: sqlite.connect('gitly.sqlite') or { panic(err) }		
-	}
+	mut app := &App{}
 
-	/// TODO - init dotenv
 	return app
 }
