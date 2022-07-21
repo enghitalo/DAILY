@@ -1,17 +1,16 @@
 module main
 
-// import time
-// import mysql
+import time
 
-[table: 'usersx']
+[table: 'usersxqa']
 struct User {
 mut:
-	id         int    [primary; sql: serial]
-	username   string
-	password   string
-	name       string
-	created_at string
-	updated_at string
-	deleted_at string
+	id         int       [primary; sql: serial]
+	username   string    [required; sql_type: 'varchar(191)']
+	password   string    [required; sql_type: 'longtext']
+	name       string    [sql_type: 'varchar(191)']
+	created_at time.Time [sql_type: 'datetime(3)']
+	updated_at time.Time [sql_type: 'datetime(3)']
+	deleted_at time.Time [sql_type: 'datetime(3)']
 	active     bool
 }

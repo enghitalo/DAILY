@@ -26,39 +26,26 @@ struct JwtPayload {
 }
 
 fn (mut app App) service_auth(username string, password string) ?string {
-	mut db := databases.create_db_connection()
-
-	results := db.query("
-		SELECT *
-		FROM usersx
-		WHERE username = '$username';
-	") or {
-		println(err)
-		return none
+	mut db := databases.create_db_connection() or {
+		eprintln(err)
+		panic(err)
 	}
 
-	json_string := '${results.maps()[0]}'.replace("'", '"')
-
-	// FIXME - active and id is wrong
-	mut user := json.decode(User, json_string) or {
-		eprintln('Failed to decode user json, error: $err')
-		return none
+	user := sql db {
+		select from User where username == username limit 1
+	}
+	if user.username != username {
+		return error('user not found')
 	}
 
-	// // TODO * Uncomment when fix
-	// if !user.active {
-	// 	println("usuário não está ativo")
-	// 	return none
-	// }
+	if !user.active {
+		return error('user is not active')
+	}
 
-	db.free()
 	db.close()
 
-	hash := user.password
-
-	bcrypt.compare_hash_and_password(password.bytes(), hash.bytes()) or {
-		eprintln('Failed to decode user json, error: $err')
-		return none
+	bcrypt.compare_hash_and_password(password.bytes(), user.password.bytes()) or {
+		return error('Failed to auth user, $err')
 	}
 
 	token := make_token(user)
@@ -84,4 +71,10 @@ fn make_token(user User) string {
 	jwt := '${header}.${payload}.$signature'
 
 	return jwt
+}
+
+/// TODO
+fn auth_verify(token string) bool {
+	signature := base64.url_decode()
+	return false
 }

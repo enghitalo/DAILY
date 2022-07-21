@@ -5,7 +5,7 @@ import databases
 import zztkm.vdotenv
 
 const (
-	http_port = 8080
+	http_port = 8081
 )
 
 struct App {
@@ -14,21 +14,12 @@ struct App {
 
 fn main() {
 	vdotenv.load()
-	mut db := databases.create_db_connection()
-	db.query('CREATE TABLE usersx (
-		id BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-		username VARCHAR(191) UNIQUE,
-		password VARCHAR(191),
-		name VARCHAR(191),
-		created_at datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-		updated_at datetime(3) DEFAULT NULL,
-		deleted_at datetime(3) DEFAULT NULL,
-		active BOOLEAN NOT NULL DEFAULT TRUE
-		)') or {
-		println('error: $err')
+	mut db := databases.create_db_connection() or { panic(err) }
+
+	sql db {
+		create table User
 	}
 
-	db.free()
 	db.close()
 
 	vweb.run(new_app(), http_port)
