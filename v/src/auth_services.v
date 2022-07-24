@@ -73,8 +73,14 @@ fn make_token(user User) string {
 	return jwt
 }
 
-/// TODO
 fn auth_verify(token string) bool {
-	signature := base64.url_decode()
-	return false
+	secret := os.getenv('SECRET_KEY')
+	token_split := token.split('.')
+
+	signature_mirror := hmac.new(secret.bytes(), '${token_split[0]}.${token_split[1]}'.bytes(),
+		sha256.sum, sha256.block_size).bytestr().bytes()
+
+	signature_from_token := base64.url_decode(token_split[2])
+
+	return hmac.equal(signature_from_token, signature_mirror)
 }
