@@ -12,12 +12,12 @@ func SetupRouters(app *gin.Engine) {
 	app.GET("/", func(context *gin.Context) { context.JSON(200, gin.H{"hello": "world"}) })
 	//jwtTestinho
 	user := app.Group("/user")
+	auth := app.Group("/auth")
 	{
 		user.POST("/create", UserController.CreateUser)
 		user.GET("/getAll", UserController.GetAllUsers)
 		user.GET("/:id", UserController.GetUserById)
 	}
-	auth := app.Group("/auth")
 	{
 		auth.POST("/login", AuthController.Login)
 	}

@@ -46,10 +46,10 @@ func CreateDBConnection() error {
 	if err != nil {
 		fmt.Println("Error occurred while connecting with the database %w", err)
 	}
-
+	
 	dbConn = db
-
 	return err
+
 }
 
 func GetDatabaseConnection() (*gorm.DB, error) {
