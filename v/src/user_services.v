@@ -2,7 +2,6 @@ module main
 
 import crypto.bcrypt
 import databases
-import time
 
 fn (mut app App) service_add_user(username string, password string) ?User {
 	mut db := databases.create_db_connection() or {
@@ -23,9 +22,6 @@ fn (mut app App) service_add_user(username string, password string) ?User {
 		username: username
 		name: password
 		password: hashed_password
-		created_at: time.now()
-		updated_at: time.now()
-		deleted_at: time.now()
 		active: true
 	}
 
