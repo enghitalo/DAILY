@@ -31,11 +31,10 @@ pub fn (mut app App) controller_create_user() vweb.Result {
 ['/user/get_all'; get]
 pub fn (mut app App) controller_get_all_user() vweb.Result {
 	token := app.get_header('token')
-	println('token: $token')
 
 	if !auth_verify(token) {
 		app.set_status(401, '')
-		return app.text('Not valid token')
+		return app.text('Not valid jwt token: "$token"')
 	}
 
 	response := app.service_get_all_user() or {
