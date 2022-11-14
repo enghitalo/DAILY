@@ -27,11 +27,7 @@ export class AuthService {
     const secret = "SECRET_KEY"; // os.getenv('SECRET_KEY')
     const token_split = token.split(".");
 
-    const signatureMirror: Buffer = Buffer.from(
-      createHmac("sha256", secret)
-        .update(`${token_split[0]}.${token_split[1]}`)
-        .digest("base64url")
-    );
+    const signatureMirror: Buffer = Buffer.from(createHmac("sha256", secret).update(`${token_split[0]}.${token_split[1]}`).digest("base64url"));
 
     const signatureFromToken = Buffer.from(token_split[2]);
     return timingSafeEqual(signatureMirror, signatureFromToken);
@@ -48,17 +44,11 @@ function makeToken(user: User): string {
     iat: Date.now(),
   };
 
-  const header: string = Buffer.from(JSON.stringify(jwt_header)).toString(
-    "base64url"
-  );
+  const header: string = Buffer.from(JSON.stringify(jwt_header)).toString("base64url");
 
-  const payload: string = Buffer.from(JSON.stringify(jwt_payload)).toString(
-    "base64url"
-  );
+  const payload: string = Buffer.from(JSON.stringify(jwt_payload)).toString("base64url");
 
-  const signature = createHmac("sha256", secret)
-    .update(`${header}.${payload}`)
-    .digest("base64url");
+  const signature = createHmac("sha256", secret).update(`${header}.${payload}`).digest("base64url");
 
   const jwt: string = `${header}.${payload}.${signature}`;
 
